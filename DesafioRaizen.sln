@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesafioRaizen", "DesafioRaizen\DesafioRaizen.csproj", "{B47CB64B-2274-4224-8E81-10CE1D9723FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesafioRaizen.Tests", "DesafioRaizen.Tests\DesafioRaizen.Tests.csproj", "{1712D5DD-8569-4227-B330-D2D514BC5915}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B47CB64B-2274-4224-8E81-10CE1D9723FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B47CB64B-2274-4224-8E81-10CE1D9723FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B47CB64B-2274-4224-8E81-10CE1D9723FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1712D5DD-8569-4227-B330-D2D514BC5915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1712D5DD-8569-4227-B330-D2D514BC5915}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1712D5DD-8569-4227-B330-D2D514BC5915}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1712D5DD-8569-4227-B330-D2D514BC5915}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

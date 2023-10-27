@@ -1,7 +1,15 @@
+using DesafioRaizen.Data;
+using DesafioRaizen.Services;
+using DesafioRaizen.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddDbContext<DataContext>();
+builder.Services.AddPagination();
 
 var app = builder.Build();
 
