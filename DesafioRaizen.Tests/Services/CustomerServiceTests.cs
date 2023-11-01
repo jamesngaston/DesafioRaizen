@@ -136,15 +136,17 @@ namespace DesafioRaizen.Tests.Services
             _customers.Setup(x => x.Update(It.IsAny<Customer>()));
             Customer updated = await _service.Update(1, request);
 
-            Customer requested = new Customer
-            {
-                Id = 1,
-                Name = $"Foo{i}",
-                Email = $"foo{i}@foo.com",
-                BirthDate = new DateTime(1900 + i, 1, 1),
-                CEP = $"{01001000 + i}"
-            };
-            Assert.Equivalent(requested, updated);
+            _customers.Verify(x => x.Update(request));
+        }
+
+        [Fact]
+        public async void Delete()
+        {
+            _customers.Setup(x => x.FindAsync(1)).ReturnsAsync(_customerList.Find(x => x.Id == 1));
+            _customers.Setup(x => x.Remove(It.IsAny<Customer>()));
+            bool deleted = await _service.Delete(1);
+
+            _customers.Verify(x => x.Remove(_customerList[1]));
         }
     }
 }

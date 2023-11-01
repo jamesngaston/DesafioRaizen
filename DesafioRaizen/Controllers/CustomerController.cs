@@ -16,17 +16,11 @@ namespace DesafioRaizen.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly DataContext _context;
         private readonly ICustomerService _service;
 
-        private bool CustomerExists(int id)
-        {
-            return (_context.Customers?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
 
-        public CustomerController(DataContext context, ICustomerService service)
+        public CustomerController(ICustomerService service)
         {
-            _context = context;
             _service = service;
         }
 
@@ -42,7 +36,7 @@ namespace DesafioRaizen.Controllers
         // GET: Customer/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Customers == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -63,8 +57,6 @@ namespace DesafioRaizen.Controllers
         }
 
         // POST: Customer/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Email,BirthDate,CEP")] CustomerDto customerDto)
@@ -80,12 +72,12 @@ namespace DesafioRaizen.Controllers
         // GET: Customer/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Customers == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _service.Get(id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -94,13 +86,11 @@ namespace DesafioRaizen.Controllers
         }
 
         // POST: Customer/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,BirthDate,CEP")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,BirthDate,CEP")] CustomerDto customerDto)
         {
-            if (id != customer.Id)
+            if (id != customerDto.Id)
             {
                 return NotFound();
             }
@@ -109,35 +99,26 @@ namespace DesafioRaizen.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
+                    await _service.Update(id, customerDto);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!CustomerExists(customer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return View(customerDto);
         }
 
         // GET: Customer/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Customers == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            CustomerDto customer = await _service.Get(id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -151,17 +132,7 @@ namespace DesafioRaizen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Customers == null)
-            {
-                return Problem("Entity set 'DataContext.Customers'  is null.");
-            }
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
-            {
-                _context.Customers.Remove(customer);
-            }
-
-            await _context.SaveChangesAsync();
+            var customer = await _service.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

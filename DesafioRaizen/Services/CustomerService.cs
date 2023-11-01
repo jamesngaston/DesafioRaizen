@@ -92,8 +92,7 @@ namespace DesafioRaizen.Services
 
         public async Task<Customer> Update(int id, Customer request)
         {
-            var customer = await Get(id);
-            request.Id = customer.Id;
+            request.Id = id;
             _context.Customers.Update(request);
             await _context.SaveChangesAsync();
             return request;

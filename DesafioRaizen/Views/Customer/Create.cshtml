@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <h1>Create</h1>
 
 <h4>Customer</h4>
@@ -29,8 +30,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="CEP" class="control-label"></label>
-                <input asp-for="CEP" class="form-control" />
+                <div class="d-flex">
+                    <input asp-for="CEP" class="form-control" />
+                    <button class="btn btn-primary" id="btn-validar-cep">Validar</button>
+                </div>
                 <span asp-validation-for="CEP" class="text-danger"></span>
+                <span id="text-validar-cep"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -46,3 +51,36 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    $('#CEP').mask('99999-999');
+
+    $('#btn-validar-cep').click(function (event) {
+        event.preventDefault();
+        let cep = $('#CEP')[0].value;
+        
+        $.get('https://viacep.com.br/ws/' + cep + '/json', function (data) {
+            if (data['erro']) {
+                $('#text-validar-cep').removeClass();
+                $('#text-validar-cep').addClass("text-danger");
+                $('#text-validar-cep').text("CEP Invalido!");
+            }
+            else {
+                $('#text-validar-cep').removeClass(); 
+                $('#text-validar-cep').addClass("text-success");
+                $('#text-validar-cep').text("CEP Validado!");
+            }
+        });
+    });
+    
+    $('#CEP').change(function (event) {
+        $('#text-validar-cep').text("");
+    });
+
+</script>
+
+<style>
+    #btn-validar-cep {
+        margin-left: 10px;
+    }
+</style>
